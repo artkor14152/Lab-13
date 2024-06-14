@@ -9,10 +9,11 @@ def getinfo(lines):
         data = line.split(",")
         isSurvived = data[1]
         port = data[12].strip()
-        if isSurvived == "1":
-            survived[port] += 1
-        else:
-            notSurvived[port] += 1
+        if port != "":
+            if isSurvived == "1":
+                survived[port] += 1
+            else:
+                notSurvived[port] += 1
     return survived, notSurvived
 
 
@@ -24,20 +25,19 @@ def var2():
     with open("data.csv") as f:
         next(f)
         survived, notSurvived = getinfo(f.readlines())
-    convert = {"Шербур": "С", "Квинстоун": "Q", "Саутгемптон": "S"}
-
-    st.table(
-        {
-            "Спасённых": survived[convert[option]],
-            "Погибших": notSurvived[convert[option]],
-        }
-    )
-    fig = plt.figure(figsize=(10, 5))
-    plt.xlabel("Значение поля Survived")
-    plt.ylabel("Количество")
-    plt.title("Количество спасённых и погибших в " + option)
-    plt.bar(
-        ["Спасённых", "Погибших"],
-        [survived[convert[option]], notSurvived[convert[option]]],
-    )
-    st.pyplot(fig)
+        convert = {"Шербур": "C", "Квинстоун": "Q", "Саутгемптон": "S"}
+        st.table(
+            {
+                "Спасённых": survived[convert[option]],
+                "Погибших": notSurvived[convert[option]],
+            }
+        )
+        fig = plt.figure(figsize=(10, 5))
+        plt.xlabel("Значение поля Survived")
+        plt.ylabel("Количество")
+        plt.title("Количество спасённых и погибших в " + option)
+        plt.bar(
+            ["Спасённых", "Погибших"],
+            [survived[convert[option]], notSurvived[convert[option]]],
+        )
+        st.pyplot(fig)
