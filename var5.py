@@ -3,44 +3,27 @@ import matplotlib.pyplot as plt
 
 
 def getinfo(lines, option):
-    males = 0
-    survived_males = 0
-    females = 0
-    survived_females = 0
+    count = {"male": 0, "female": 0}
+    survived = {"male": 0, "female": 0}
     for line in lines:
         data = line.split(",")
         sex = data[5]
-        SibSp = data[7]
-        survived = data[1]
-        if SibSp == "0" and option == "0":
-            if sex == "male":
-                males += 1
-                if survived == "1":
-                    survived_males += 1
-            else:
-                females += 1
-                if survived == "1":
-                    survived_females += 1
-        elif SibSp == "1" or SibSp == "2" and option == "1-2":
-            if sex == "male":
-                males += 1
-                if survived == "1":
-                    survived_males += 1
-            else:
-                females += 1
-                if survived == "1":
-                    survived_females += 1
-        elif option == "Больше 2":
-            if sex == "male":
-                males += 1
-                if survived == "1":
-                    survived_males += 1
-            else:
-                females += 1
-                if survived == "1":
-                    survived_females += 1
-    maleRate = survived_males / males * 100
-    femaleRate = survived_females / females * 100
+        SibSp = int(data[7])
+        isSurvived = data[1]
+        if sex == "male":
+            count["male"] += 1
+        else:
+            count["female"] += 1
+        if isSurvived == "1":
+            if (
+                (SibSp == 0 and option == "0")
+                or (SibSp == 1 and option == "1-2")
+                or (SibSp > 1 and option == "Больше 2")
+            ):
+                survived[sex] += 1
+
+    maleRate = survived["male"] / count["male"] * 100
+    femaleRate = survived["female"] / count["female"] * 100
     return maleRate, femaleRate
 
 
